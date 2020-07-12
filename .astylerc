@@ -1,0 +1,30 @@
+#Braces start on next line (Allman/BSD style)
+style=break
+
+indent=spaces=4
+indent-namespaces
+#Indent comments with their neighboring code
+indent-col1-comments
+#Align multiline conditionals with their open paren
+min-conditional-indent=0
+#Maximum amount of spaces astyle will attempt to use when aligning with its
+# opening bracket (like in multiline conditionals). Unfortunately, this cannot
+# be set to unlimited or higher than 120.
+max-continuation-indent=120
+
+pad-oper
+pad-comma
+#Enforce whitespace between conditional/loop keywords and the open parens
+pad-header
+#Remove any other paren-related padding, i.e. internal padding
+unpad-paren
+
+#* and & attach to names in variable declarations, e.g. `char *str`
+align-pointer=name
+
+#Remove brackets around one-line conditionals and loops
+#WARNING: This can destroy working relationships with coworkers.
+remove-brackets
+
+#Logical operands come at the end of lines in multiline conditionals
+break-after-logical
