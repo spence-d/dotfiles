@@ -4,17 +4,37 @@ setopt interactivecomments
 autoload -U colors && colors
 autoload -Uz compinit && compinit
 
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]
+then
+    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]
+then
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
-alias vi="mvim -v" cat="bat"
+if [ -x "$(command -v mvim)" ]
+then
+    alias vi="mvim -v"
+elif [ -x "$(command -v vim)" ]
+then
+    alias vi="vim"
+fi
+
+[ -x "$(command -v bat)" ] && alias cat="bat"
+
 export VISUAL=vi
 bindkey -v
 export TERM=xterm-256color CLICOLOR=1
 export PATH=$PATH:~/bin
 export BROWSER=w3m
 
-source ~/wimpline/.wimpline.sh
+if [ -f ~/wimpline/.wimpline.sh ]
+then
+    source ~/wimpline/.wimpline.sh
+else
+    PROMPT="%B%(?.%F{green}.%F{red})%h%b:%f %F{magenta}%*%f %F{yellow}%m:%B%25<…<%~%b%f%# "
+fi
 
 function vi-kill-eol {
     zle vi-kill-eol-old
