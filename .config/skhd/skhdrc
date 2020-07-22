@@ -1,0 +1,43 @@
+#Focus window
+alt - h : yabai -m window --focus west
+alt - j : yabai -m window --focus south
+alt - k : yabai -m window --focus north
+alt - l : yabai -m window --focus east
+alt - n : yabai -m window --focus next || yabai -m window --focus first
+alt - p : yabai -m window --focus prev || yabai -m window --focus last
+alt - o : yabai -m window --focus recent
+
+#Move window
+shift + alt - h : yabai -m window --warp west
+shift + alt - j : yabai -m window --warp south
+shift + alt - k : yabai -m window --warp north
+shift + alt - l : yabai -m window --warp east
+
+#Swap windows
+shift + alt - n : yabai -m window --swap next || yabai -m window --focus first
+shift + alt - p : yabai -m window --swap prev || yabai -m window --focus last
+shift + alt - o : yabai -m window --swap recent
+
+#Detach/reattach window from grid
+alt - d : yabai -m window --toggle float
+#Zoom window in front of others
+alt - z : yabai -m window --toggle zoom-fullscreen
+#Minimize window
+alt - m : yabai -m window --minimize
+
+#Move window one space over
+alt - left : yabai -m window --space prev
+alt - right : yabai -m window --space next
+
+alt - t : osascript -e 'tell application "iTerm"' \
+                    -e '  if it is not running then launch' \
+                    -e '  create window with default profile' \
+                    -e 'end tell'
+                    
+alt - b : osascript -e 'tell application "Vivaldi"' \
+                    -e '  if it is running then' \
+                    -e '    make window' \
+                    -e '  else' \
+                    -e '    launch' \
+                    -e '  end if' \
+                    -e 'end tell'

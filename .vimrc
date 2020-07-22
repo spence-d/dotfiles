@@ -13,12 +13,15 @@ set number relativenumber
 highlight LineNr ctermfg=8
 "Highlights the current line
 set cursorline
-highlight CursorLine ctermbg=234 cterm=none
+highlight CursorLine ctermbg=233 cterm=none
 "Adds a guiding line at column 80
 set colorcolumn=80
-highlight ColorColumn ctermbg=232
-highlight CursorLineNr cterm=bold ctermfg=white ctermbg=232
+highlight ColorColumn ctermbg=233
+highlight CursorLineNr cterm=bold ctermfg=white ctermbg=233
 highlight Folded ctermbg=236
+highlight DiffAdd ctermbg=17
+highlight DiffChange ctermbg=54
+highlight DiffText ctermbg=52
 
 "Mouse enabled in all modes
 set mouse=a
@@ -125,6 +128,10 @@ call plug#begin('~/.vim/plugged')
         imap <C-l> <Plug>(coc-snippets-expand)
         "Shortcut to switch between header and source file
         map <C-h> :CocCommand clangd.switchSourceHeader<CR>
+
+    "Highlights current paragraph
+    Plug 'junegunn/limelight.vim'
+        let g:limelight_conceal_ctermfg = 'gray'
 
     "Fuzzy finder
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }

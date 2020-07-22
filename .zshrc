@@ -22,12 +22,14 @@ then
 fi
 
 [ -x "$(command -v bat)" ] && alias cat="bat"
+[ -x "$(command -v lsd)" ] && alias ls="lsd"
 
 export VISUAL=vi
 bindkey -v
 export TERM=xterm-256color CLICOLOR=1
 export PATH=$PATH:~/bin
 export BROWSER=w3m
+export XDG_CONFIG_HOME=~/dotfiles/.config/
 
 if [ -f ~/wimpline/.wimpline.sh ]
 then
@@ -36,9 +38,23 @@ else
     PROMPT="%B%(?.%F{green}.%F{red})%h%b:%f %F{magenta}%*%f %F{yellow}%m:%B%25<…<%~%b%f%# "
 fi
 
+kernel=`uname -s`
+case "$kernel" in
+    Darwin)
+        copy_cmd="pbcopy"
+        paste_cmd="pbpaste"
+        ;;
+    Linux)
+        ;;
+    Haiku)
+        copy_cmd="clipboard -i"
+        paste_cmd="clipboard -p"
+        ;;
+esac
+
 function vi-kill-eol {
     zle vi-kill-eol-old
-    echo "$CUTBUFFER" | pbcopy -i
+    echo "$CUTBUFFER" | eval $copy_cmd
 }
 
 zle -A vi-kill-eol vi-kill-eol-old
@@ -46,7 +62,7 @@ zle -N vi-kill-eol
 
 function vi-delete {
     zle vi-delete-old
-    echo "$CUTBUFFER" | pbcopy -i
+    echo "$CUTBUFFER" | eval $copy_cmd
 }
 
 zle -A vi-delete vi-delete-old
@@ -54,14 +70,14 @@ zle -N vi-delete
 
 function vi-yank {
     zle vi-yank-old
-    echo "$CUTBUFFER" | pbcopy -i
+    echo "$CUTBUFFER" | eval $copy_cmd
 }
 
 zle -A vi-yank vi-yank-old
 zle -N vi-yank
 
 function vi-put-before {
-    CUTBUFFER=$(pbpaste)
+    CUTBUFFER=$(eval $paste_cmd)
     zle vi-put-before-old
 }
 
@@ -69,7 +85,7 @@ zle -A vi-put-before vi-put-before-old
 zle -N vi-put-before
 
 function vi-put-after {
-    CUTBUFFER=$(pbpaste)
+    CUTBUFFER=$(eval $paste_cmd)
     zle vi-put-after-old
 }
 

@@ -1,0 +1,25 @@
+#Set tiling mode
+yabai -m config layout bsp
+
+#Add a small amount of padding between windows
+yabai -m config top_padding    10
+yabai -m config bottom_padding 10
+yabai -m config left_padding   10
+yabai -m config right_padding  10
+yabai -m config window_gap     10
+
+#Center mouse on window when it gains focus
+#yabai -m config mouse_follows_focus on
+
+#Dim inactive windows (broken)
+yabai -m config window_opacity on
+yabai -m config active_window_opacity 1.0
+yabai -m config normal_window_opacity 0.5
+
+#Exceptions
+yabai -m rule --add app="^System Preferences$" manage=off
+#yabai -m rule --add app="^Mail$" title="^$" manage=off
+yabai -m rule --add app="^FaceTime$" manage=off
+yabai -m rule --add app="^Stickies$" manage=off
+yabai -m rule --add app="^GlobalProtect$" manage=off
+yabai -m rule --add app="^VIP Access$" manage=off

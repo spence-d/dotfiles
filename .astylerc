@@ -5,6 +5,7 @@ indent=spaces=4
 indent-namespaces
 #Indent comments with their neighboring code
 indent-col1-comments
+max-code-length=80
 #Align multiline conditionals with their open paren
 min-conditional-indent=0
 #Maximum amount of spaces astyle will attempt to use when aligning with its
@@ -24,7 +25,7 @@ align-pointer=name
 
 #Remove brackets around one-line conditionals and loops
 #WARNING: This can destroy working relationships with coworkers.
-remove-brackets
+remove-braces
 
 #Logical operands come at the end of lines in multiline conditionals
 break-after-logical
