@@ -36,7 +36,9 @@ alt - t : osascript -e 'tell application "iTerm"' \
                     
 alt - b : osascript -e 'tell application "Vivaldi"' \
                     -e '  if it is running then' \
-                    -e '    make window' \
+                    -e '    tell (make new window)' \
+                    -e '      set URL of active tab to "file:///Users/sdailey/startpage/index.html"' \
+                    -e '    end tell' \
                     -e '  else' \
                     -e '    launch' \
                     -e '  end if' \

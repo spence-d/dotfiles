@@ -23,6 +23,7 @@ fi
 
 [ -x "$(command -v bat)" ] && alias cat="bat"
 [ -x "$(command -v lsd)" ] && alias ls="lsd"
+[ -x "$(command -v dust)" ] && alias du="dust"
 
 export VISUAL=vi
 bindkey -v
