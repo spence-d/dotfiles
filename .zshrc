@@ -7,10 +7,17 @@ autoload -Uz compinit && compinit
 if [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]
 then
     source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]
+then
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
+
 if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]
 then
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]
+then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 if [ -x "$(command -v mvim)" ]
@@ -22,7 +29,11 @@ then
 fi
 
 [ -x "$(command -v bat)" ] && alias cat="bat"
+[ -x "$(command -v batcat)" ] && alias cat="batcat"
+
 [ -x "$(command -v lsd)" ] && alias ls="lsd"
+[ -x "$(command -v colorls)" ] && alias ls="colorls"
+
 [ -x "$(command -v dust)" ] && alias du="dust"
 
 export VISUAL=vi
@@ -46,6 +57,8 @@ case "$kernel" in
         paste_cmd="pbpaste"
         ;;
     Linux)
+        copy_cmd="xclip -selection CLIPBOARD"
+        paste_cmd="xclip -out -selection CLIPBOARD"
         ;;
     Haiku)
         copy_cmd="clipboard -i"
@@ -92,5 +105,16 @@ function vi-put-after {
 
 zle -A vi-put-after vi-put-after-old
 zle -N vi-put-after
+
+#Allow backspace to go before start of vi insertion
+bindkey -v '^?' backward-delete-char
+
+#Gosh I wish Linux would do this automatically, but whenever I reboot my
+#computer or replug my keyboard, it fails to map caps lock to esc, so I need
+#to run this command.
+alias esc="setxkbmap -layout dvorak -option caps:escape"
+
+#cd to the top level of a git repository.
+alias cdr='cd $(git rev-parse --show-toplevel)'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

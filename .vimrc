@@ -29,7 +29,14 @@ set mouse=a
 behave xterm
 
 "Yank and paste using the OS clipboard
-set clipboard=unnamed
+if has('unnamedplus')
+	"On X11, yanks and deletions go to copy clipboard "+, and
+	" visual selections go to the selection buffer "*
+	set clipboard=unnamedplus,autoselect
+else
+	"Otherwise, just send everything to the clipboard "* and ignore selections
+	set clipboard=unnamed
+endif
 
 "Tabs/indentation
 "Tab key inserts 2 spaces
@@ -68,8 +75,12 @@ set splitright
 "Enable syntax completion
 set omnifunc=syntaxcomplete#Complete
 
-"Use git-grep for :grep
+"Use a better alternative for :grep
+if executable("rg")
+set grepprg=rg\ --vimgrep\ --auto-hybrid-regex
+else
 set grepprg=git\ grep\ -n\ $*
+endif
 
 "Change leader character from \ to space.
 let mapleader=" "
@@ -123,11 +134,11 @@ call vundle#end()
 "Configure plugins with vimplug
 call plug#begin('~/.vim/plugged')
     "Completion engine
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    "Plug 'neoclide/coc.nvim', {'branch': 'release'}
         "Workaround for weirdness selecting snippets
-        imap <C-l> <Plug>(coc-snippets-expand)
+        "imap <C-l> <Plug>(coc-snippets-expand)
         "Shortcut to switch between header and source file
-        map <C-h> :CocCommand clangd.switchSourceHeader<CR>
+        "map <C-h> :CocCommand clangd.switchSourceHeader<CR>
 
     "Highlights current paragraph
     Plug 'junegunn/limelight.vim'
@@ -138,13 +149,23 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/fzf.vim'
         "Find files in cwd
         map <Leader>ff :Files<CR>
+        map <C-@> :Files<CR>
         "Find modified files in current git repo
         map <Leader>fg :GFiles?<CR>
         "Find in ctags
         map <Leader>ft :Tags<CR>
+        "Find in ex history
+        map <Leader>fh :History:<CR>
+		"Find in open buffers
+        map <Leader>fb :Buffers<CR>
+		"Find in files using ripgrep
+        map <Leader>fr :Rg<CR>
 
     "Wiki-like note taking
     Plug 'vimwiki/vimwiki'
+
+	"Bracketing macros
+	Plug 'tpope/vim-surround'
 call plug#end()
 
 "cscope functionality

@@ -15,7 +15,7 @@
 	abbrevCommit = true
 [core]
     #Custom extra gitignore rules
-    excludesfile = ~/.gitignore
+    excludesfile = .gitignore
 [push]
     #Unless otherwise specified, push the current branch to its identically-
     # named remote counterpart
