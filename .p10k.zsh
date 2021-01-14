@@ -43,7 +43,7 @@
   # automatically hidden when the input line reaches it. Right prompt above the
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-    vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
+    #vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
     status                  # exit code of the last command
     command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
@@ -523,11 +523,11 @@
   #######################[ background_jobs: presence of background jobs ]#######################
   # Background jobs color.
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=231
-  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=208
+  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=129
   # Don't show the number of background jobs.
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=true
   # Custom icon.
-  # typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VISUAL_IDENTIFIER_EXPANSION='⭐'
+  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VISUAL_IDENTIFIER_EXPANSION=''
 
   #######################[ direnv: direnv status (https://direnv.net/) ]########################
   # Direnv color.
