@@ -30,12 +30,12 @@ behave xterm
 
 "Yank and paste using the OS clipboard
 if has('unnamedplus')
-	"On X11, yanks and deletions go to copy clipboard "+, and
-	" visual selections go to the selection buffer "*
-	set clipboard=unnamedplus,autoselect
+    "On X11, yanks and deletions go to copy clipboard "+, and
+    " visual selections go to the selection buffer "*
+    set clipboard=unnamedplus,autoselect
 else
-	"Otherwise, just send everything to the clipboard "* and ignore selections
-	set clipboard=unnamed
+    "Otherwise, just send everything to the clipboard "* and ignore selections
+    set clipboard=unnamed
 endif
 
 "Tabs/indentation
@@ -77,7 +77,7 @@ set omnifunc=syntaxcomplete#Complete
 
 "Use a better alternative for :grep
 if executable("rg")
-set grepprg=rg\ --vimgrep\ --auto-hybrid-regex
+set grepprg=rg\ --vimgrep\ --auto-hybrid-regex\ --ignore-file\ ~/dotfiles/.gitignore
 else
 set grepprg=git\ grep\ -n\ $*
 endif
@@ -119,7 +119,7 @@ call vundle#begin()
     Plugin 'xuyuanp/nerdtree-git-plugin'
 
     "Powerline-like status bars on the top and bottom
-    Plugin 'bling/vim-airline' 
+    Plugin 'bling/vim-airline'
         let g:airline_powerline_fonts = 1
         let g:airline#extensions#tabline#enabled = 1
         let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
@@ -156,22 +156,22 @@ call plug#begin('~/.vim/plugged')
         map <Leader>ft :Tags<CR>
         "Find in ex history
         map <Leader>fh :History:<CR>
-		"Find in open buffers
+        "Find in open buffers
         map <Leader>fb :Buffers<CR>
-		"Find in files using ripgrep
+        "Find in files using ripgrep
         map <Leader>fr :Rg<CR>
 
     "Wiki-like note taking
     Plug 'vimwiki/vimwiki'
 
-	"Bracketing macros
-	Plug 'tpope/vim-surround'
+    "Bracketing macros
+    Plug 'tpope/vim-surround'
 call plug#end()
 
 "cscope functionality
 if filereadable("cscope.out")
-"	set cst
-	cs add cscope.out
+    "set cst
+    cs add cscope.out
 endif
 "Find calls to function under cursor with cscope
 map <F1> lb"zyw:cs f c <C-r>z<CR>
@@ -181,5 +181,6 @@ map <F2> lb"zyw:grep <C-r>z<CR>
 
 "%% in command mode expands to the directory path of the current file
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+cnoremap %. <C-R>=fnameescape(expand('%:r')).'.'<cr>
 "Copy to the end of line
 map Y y$
