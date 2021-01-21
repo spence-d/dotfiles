@@ -58,6 +58,8 @@ export TERM=xterm-256color CLICOLOR=1
 export PATH=$PATH:~/bin
 export BROWSER=w3m
 export XDG_CONFIG_HOME=~/dotfiles/.config/
+#Make the scroll wheel work when the pager runs in tmux
+export LESS="--mouse"
 
 if [ -f ~/wimpline/.wimpline.sh ]
 then
