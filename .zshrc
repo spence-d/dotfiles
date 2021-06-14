@@ -1,5 +1,5 @@
-#On terminals with tmux installed that aren't running it: run tmux
-[ -t 1 ] && command -v tmux >/dev/null && [ -z "$TMUX" ] && tmux
+#On non-SSH terminals with tmux installed that aren't running it: run tmux
+[ -t 1 ] && [ -z "$SSH_CLIENT" ] && command -v tmux >/dev/null && [ -z "$TMUX" ] && tmux
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -24,6 +24,8 @@ elif [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]
 then
   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
+#Shift-Tab will accept the suggestion and run it.
+bindkey '^[[Z' autosuggest-execute
 
 if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]
 then
@@ -49,6 +51,7 @@ fi
 
 [ -x "$(command -v lsd)" ] && alias ls="lsd"
 [ -x "$(command -v colorls)" ] && alias ls="colorls"
+alias tree='ls --tree'
 
 [ -x "$(command -v dust)" ] && alias du="dust"
 
@@ -59,7 +62,10 @@ export PATH=$PATH:~/bin
 export BROWSER=w3m
 export XDG_CONFIG_HOME=~/dotfiles/.config/
 #Make the scroll wheel work when the pager runs in tmux
-export LESS="--mouse"
+#Allow terminal colors
+#Don't run pager if there's nothing to scroll
+#Ctrl-C quits
+export LESS="--mouse --RAW-CONTROL-CHARS --quit-if-one-screen --quit-on-intr"
 
 if [ -f ~/wimpline/.wimpline.sh ]
 then
@@ -165,13 +171,14 @@ bindkey -v '^?' backward-delete-char
 #Gosh I wish Linux would do this automatically, but whenever I reboot my
 #computer or replug my keyboard, it fails to map caps lock to esc, so I need
 #to run this command.
-alias esc="setxkbmap -layout dvorak -option caps:escape"
+alias esc="setxkbmap -layout dvorak -option caps:escape,altwin:menu_win"
 
 #cd to the top level of a git repository.
 alias cdr='cd $(git rev-parse --show-toplevel)'
 
 #fzf keybindings for zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
 #Add Ctrl-Space as a handier alias for Ctrl-T
 bindkey '^ ' fzf-file-widget
 #Use fd with fzf if available. Faster than find.

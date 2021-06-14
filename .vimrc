@@ -7,21 +7,33 @@ filetype plugin on
 set encoding=utf8
 
 "Colors and margins
-colorscheme elflord
+colorscheme molokai
 "Adds a margin with line numbers relative to the current line
 set number relativenumber
-highlight LineNr ctermfg=8
+"Merge gutter and line numbers
+"set signcolumn=number
+highlight LineNr ctermfg=8 ctermbg=233
 "Highlights the current line
 set cursorline
-highlight CursorLine ctermbg=233 cterm=none
-"Adds a guiding line at column 80
-set colorcolumn=80
-highlight ColorColumn ctermbg=233
-highlight CursorLineNr cterm=bold ctermfg=white ctermbg=233
+set cursorlineopt=number,screenline
+"highlight CursorLine cterm=bold
+"Adds a guiding line at column 80 (or whatever textwidth is set to)
+set colorcolumn=+0
+highlight Normal ctermbg=0
+highlight ColorColumn ctermbg=232
+highlight CursorLine ctermbg=232
+highlight CursorLineNr cterm=bold ctermfg=white ctermbg=232
+highlight SignColumn ctermbg=234
 highlight Folded ctermbg=236
 highlight DiffAdd ctermbg=17
 highlight DiffChange ctermbg=54
 highlight DiffText ctermbg=52
+if index(['qf', 'help', 'fugitive'], &filetype) >= 0
+	setlocal textwidth=0
+else
+	setlocal textwidth=80
+end
+"This is a line of text that i made especially long for the purposes of testing the formatting options so that it will wrap when it reaches a certain length please and thank you don't call me shirley.
 
 "Mouse enabled in all modes
 set mouse=a
@@ -92,8 +104,6 @@ call vundle#begin()
 
     "Git integration
     Plugin 'tpope/vim-fugitive'
-    "Git line change symbols in the margin
-    Plugin 'airblade/vim-gitgutter'
 
     ":VimuxRunCommand opens small tmux pane
     Plugin 'benmills/vimux'
@@ -107,6 +117,8 @@ call vundle#begin()
 
     "Gives tab key autocomplete superpowers
     Plugin 'ervandew/supertab'
+		"Traverse tab menu from top to bottom
+		let g:SuperTabDefaultCompletionType = "<c-n>"
     "Keywords that autocomplete into common code
     Plugin 'honza/vim-snippets'
 
@@ -134,11 +146,33 @@ call vundle#end()
 "Configure plugins with vimplug
 call plug#begin('~/.vim/plugged')
     "Completion engine
-    "Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'neoclide/coc.nvim', {'branch': 'release', 'tag': 'v0.0.80'}
+		" GoTo code navigation.
+		nmap <silent> gd <Plug>(coc-definition)
+		nmap <silent> gr <Plug>(coc-references)
+		" Formatting selected code.
+		xmap <leader>f  <Plug>(coc-format-selected)
+		nmap <leader>f  <Plug>(coc-format-selected)
         "Workaround for weirdness selecting snippets
-        "imap <C-l> <Plug>(coc-snippets-expand)
+		"Requires plugin coc-snippets
+		imap <C-j> <Plug>(coc-snippets-expand-jump)
         "Shortcut to switch between header and source file
         "map <C-h> :CocCommand clangd.switchSourceHeader<CR>
+		"coc-git keybindings:
+        " navigate chunks of current buffer
+        nmap [g <Plug>(coc-git-prevchunk)
+        nmap ]g <Plug>(coc-git-nextchunk)
+        " navigate conflicts of current buffer
+        nmap [c <Plug>(coc-git-prevconflict)
+        nmap ]c <Plug>(coc-git-nextconflict)
+        " show chunk diff at current position
+        nmap gs <Plug>(coc-git-chunkinfo)
+        " show commit contains current position
+        nmap gc <Plug>(coc-git-commit)
+        " create text object for git chunks
+        omap ig <Plug>(coc-git-chunk-inner)
+        xmap ig <Plug>(coc-git-chunk-inner)
+
 
     "Highlights current paragraph
     Plug 'junegunn/limelight.vim'
@@ -166,6 +200,16 @@ call plug#begin('~/.vim/plugged')
 
     "Bracketing macros
     Plug 'tpope/vim-surround'
+
+	Plug 'tomasr/molokai'
+
+    "Bold/underline unique letters for jumping
+    Plug 'unblevable/quick-scope'
+    highlight QuickScopePrimary cterm=bold
+    highlight QuickScopeSecondary cterm=underline
+
+	"Lightweight C++ syntax highlighting
+    Plug 'bfrg/vim-cpp-modern'
 call plug#end()
 
 "cscope functionality
@@ -179,8 +223,15 @@ map <F1> lb"zyw:cs f c <C-r>z<CR>
 "Grep word under cursor
 map <F2> lb"zyw:grep <C-r>z<CR>
 
+"Generic save-and-run command.
+"If it's not an independently executable script, override it by filetype.
+map <F4> :w\|!./%<CR>
+autocmd FileType vim map <F4> :w\|source %<CR>
+
 "%% in command mode expands to the directory path of the current file
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
 cnoremap %. <C-R>=fnameescape(expand('%:r')).'.'<cr>
 "Copy to the end of line
 map Y y$
+"Format the current function
+map gqp [[v%o-gq
