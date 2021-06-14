@@ -6,35 +6,6 @@ endif
 filetype plugin on
 set encoding=utf8
 
-"Colors and margins
-colorscheme molokai
-"Adds a margin with line numbers relative to the current line
-set number relativenumber
-"Merge gutter and line numbers
-"set signcolumn=number
-highlight LineNr ctermfg=8 ctermbg=233
-"Highlights the current line
-set cursorline
-set cursorlineopt=number,screenline
-"highlight CursorLine cterm=bold
-"Adds a guiding line at column 80 (or whatever textwidth is set to)
-set colorcolumn=+0
-highlight Normal ctermbg=0
-highlight ColorColumn ctermbg=232
-highlight CursorLine ctermbg=232
-highlight CursorLineNr cterm=bold ctermfg=white ctermbg=232
-highlight SignColumn ctermbg=234
-highlight Folded ctermbg=236
-highlight DiffAdd ctermbg=17
-highlight DiffChange ctermbg=54
-highlight DiffText ctermbg=52
-if index(['qf', 'help', 'fugitive'], &filetype) >= 0
-    setlocal textwidth=0
-else
-    setlocal textwidth=80
-end
-"This is a line of text that i made especially long for the purposes of testing the formatting options so that it will wrap when it reaches a certain length please and thank you don't call me shirley.
-
 "Mouse enabled in all modes
 set mouse=a
 "Special behavior for different button clicks, dragging, shift-clicks.
@@ -209,12 +180,40 @@ call plug#begin('~/.vim/plugged')
 
     "Bold/underline unique letters for jumping
     Plug 'unblevable/quick-scope'
-    highlight QuickScopePrimary cterm=bold
-    highlight QuickScopeSecondary cterm=underline
 
   "Lightweight C++ syntax highlighting
     Plug 'bfrg/vim-cpp-modern'
 call plug#end()
+
+"Colors and margins
+colorscheme molokai
+"Adds a margin with line numbers relative to the current line
+set number relativenumber
+"Merge gutter and line numbers
+"set signcolumn=number
+highlight LineNr ctermfg=8 ctermbg=233
+"Highlights the current line
+set cursorline
+set cursorlineopt=number,screenline
+"highlight CursorLine cterm=bold
+"Adds a guiding line at column 80 (or whatever textwidth is set to)
+set colorcolumn=+0
+highlight Normal ctermbg=0
+highlight ColorColumn ctermbg=232
+highlight CursorLine ctermbg=232
+highlight CursorLineNr cterm=bold ctermfg=white ctermbg=232
+highlight SignColumn ctermbg=234
+highlight Folded ctermbg=236
+highlight DiffAdd ctermbg=17
+highlight DiffChange ctermbg=54
+highlight DiffText ctermbg=52
+highlight QuickScopePrimary cterm=bold
+highlight QuickScopeSecondary cterm=underline
+if index(['qf', 'help', 'fugitive'], &filetype) >= 0
+    setlocal textwidth=0
+else
+    setlocal textwidth=80
+end
 
 "cscope functionality
 if filereadable("cscope.out")
