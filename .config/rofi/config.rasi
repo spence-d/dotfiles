@@ -1,0 +1,6 @@
+configuration {
+  font: "Monofur Bold 13";
+  combi-modi: "window,drun,ssh";
+  show-icons: true;
+  theme: "Monokai";
+}

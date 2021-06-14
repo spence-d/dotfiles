@@ -17,7 +17,7 @@ highlight CursorLine ctermbg=233 cterm=none
 "Adds a guiding line at column 80
 set colorcolumn=80
 highlight ColorColumn ctermbg=233
-highlight CursorLineNr cterm=bold ctermfg=white ctermbg=233
+highlight CursorLineNr cterm=bold ctermfg=white
 highlight Folded ctermbg=236
 highlight DiffAdd ctermbg=17
 highlight DiffChange ctermbg=54
@@ -81,6 +81,10 @@ set grepprg=rg\ --vimgrep\ --auto-hybrid-regex\ --ignore-file\ ~/dotfiles/.gitig
 else
 set grepprg=git\ grep\ -n\ $*
 endif
+
+"Persistent undos
+set undofile
+set undodir=~/.vim/undos
 
 "Change leader character from \ to space.
 let mapleader=" "
@@ -166,6 +170,8 @@ call plug#begin('~/.vim/plugged')
 
     "Bracketing macros
     Plug 'tpope/vim-surround'
+    
+    Plug 'tomasr/molokai'
 call plug#end()
 
 "cscope functionality
