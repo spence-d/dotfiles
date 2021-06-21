@@ -33,7 +33,7 @@ exec --no-startup-id nm-applet
 
 exec --no-startup-id picom
 exec --no-startup-id nitrogen --restore
-exec --no-startup-id setxkbmap -layout dvorak -option caps:escape
+exec --no-startup-id setxkbmap -layout dvorak -option caps:escape,altwin:menu_win,terminate:ctrl_alt_bksp
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status

@@ -10,9 +10,16 @@ fi
 
 setopt AUTO_CD
 setopt HIST_IGNORE_DUPS
+HISTSIZE=900
+SAVEHIST=900
 setopt interactivecomments
 autoload -U colors && colors
 autoload -Uz compinit && compinit
+
+if [ -f /usr/share/share/z.sh ]
+then
+  source /usr/share/share/z.sh
+fi
 
 if [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]
 then
@@ -37,6 +44,8 @@ elif [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting
 then
   source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
+#Shell comments are (bafflingly) invisible by default
+ZSH_HIGHLIGHT_STYLES[comment]=fg=59
 
 if [ -x "$(command -v mvim)" ]
 then
@@ -51,11 +60,15 @@ fi
 
 [ -x "$(command -v lsd)" ] && alias ls="lsd"
 [ -x "$(command -v colorls)" ] && alias ls="colorls"
+[ -x "$(command -v exa)" ] && alias ls="exa --icons --git"
 alias tree='ls --tree'
+[ -x "$(command -v exa)" ] && alias tree="exa --icons --tree"
 
 [ -x "$(command -v dust)" ] && alias du="dust"
 
-export VISUAL=vi
+[ -x "$(command -v procs)" ] && alias ps="procs"
+
+export VISUAL=vim
 bindkey -v
 export TERM=xterm-256color CLICOLOR=1
 export PATH=$PATH:~/bin
@@ -167,6 +180,10 @@ zle -N zle-keymap-select
 
 #Allow backspace to go before start of vi insertion
 bindkey -v '^?' backward-delete-char
+#Delete, Home, and End keys are broken by default
+bindkey '^[[3~' delete-char
+bindkey '^[[1~' beginning-of-line
+bindkey '^[[4~' end-of-line
 
 #Gosh I wish Linux would do this automatically, but whenever I reboot my
 #computer or replug my keyboard, it fails to map caps lock to esc, so I need
@@ -187,6 +204,24 @@ then
   export FZF_DEFAULT_COMMAND='fd --type f --color=never'
   export FZF_ALT_C_COMMAND='fd --type d . --color=never'
 fi
+
+fzf-greenclip-widget() {
+  LBUFFER="${LBUFFER}$(greenclip print | sed '/^$/d' | fzf -e)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+zle     -N   fzf-greenclip-widget
+bindkey '^X' fzf-greenclip-widget
+
+#Enable tab-completion menu
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+#Use the vi navigation keys in menu completion
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/dotfiles/.p10k.zsh ]] || source ~/dotfiles/.p10k.zsh

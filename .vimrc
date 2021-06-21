@@ -13,9 +13,10 @@ behave xterm
 
 "Yank and paste using the OS clipboard
 if has('unnamedplus')
-    "On X11, yanks and deletions go to copy clipboard "+, and
-    " visual selections go to the selection buffer "*
-    set clipboard=unnamedplus,autoselect
+    "On X11, yanks and deletions go to copy clipboard "+, 
+	" yanks will also go to the selection buffer for good measure, and
+    " visual selections just go to the selection buffer "*
+    set clipboard=unnamedplus,unnamed,autoselect
 else
     "Otherwise, just send everything to the clipboard "* and ignore selections
     set clipboard=unnamed
@@ -147,6 +148,7 @@ call plug#begin('~/.vim/plugged')
         " create text object for git chunks
         omap ig <Plug>(coc-git-chunk-inner)
         xmap ig <Plug>(coc-git-chunk-inner)
+        nmap <leader>u :CocCommand git.chunkUndo<CR>
 
 
     "Highlights current paragraph
@@ -169,7 +171,9 @@ call plug#begin('~/.vim/plugged')
         map <Leader>fb :Buffers<CR>
         "Find in files using ripgrep
         map <Leader>fr :Rg<CR>
-
+        "Find lines from selection buffer history
+        command! -bang -nargs=? -complete=dir Clip call fzf#run(fzf#wrap({'source': 'greenclip print', 'sink': 'norm i'}, <bang>0))
+        map <Leader>fc :Clip<CR>
     "Wiki-like note taking
     Plug 'vimwiki/vimwiki'
 
@@ -180,9 +184,17 @@ call plug#begin('~/.vim/plugged')
 
     "Bold/underline unique letters for jumping
     Plug 'unblevable/quick-scope'
+	let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
-  "Lightweight C++ syntax highlighting
+    "Lightweight C++ syntax highlighting
     Plug 'bfrg/vim-cpp-modern'
+
+    "Swap list elements
+    Plug 'machakann/vim-swap'
+
+    "Integration between vim and tmux split-pane navigation
+    Plug 'christoomey/vim-tmux-navigator'
+    nnoremap <silent> <C-o> :TmuxNavigatePrevious<CR>
 call plug#end()
 
 "Colors and margins
@@ -207,8 +219,15 @@ highlight Folded ctermbg=236
 highlight DiffAdd ctermbg=17
 highlight DiffChange ctermbg=54
 highlight DiffText ctermbg=52
-highlight QuickScopePrimary cterm=bold
-highlight QuickScopeSecondary cterm=underline
+highlight Type cterm=bold,italic
+highlight Constant cterm=bold,italic
+highlight Boolean cterm=bold,italic
+highlight Comment cterm=italic
+highlight StorageClass cterm=italic
+highlight Structure cterm=italic
+highlight TypeDef cterm=italic
+highlight QuickScopePrimary cterm=bold,underline
+highlight QuickScopeSecondary cterm=italic,underline
 if index(['qf', 'help', 'fugitive'], &filetype) >= 0
     setlocal textwidth=0
 else
@@ -238,3 +257,22 @@ cnoremap %. <C-R>=fnameescape(expand('%:r')).'.'<cr>
 map Y y$
 "Format the current function
 map gqp [[v%o-gq
+"Always show at least 5 lines above/below the cursor
+set scrolloff=4
+"Cleaned up NPC-viewer. Run `:set list` to see
+set listchars=tab:\|->,trail:_,extends:>,precedes:<,nbsp:+
+
+"Use relative line numbers only in normal mode
+augroup every
+autocmd!
+    au InsertEnter * set norelativenumber
+    au InsertLeave * set relativenumber
+augroup END
+
+"More sensible back-and-forth between panes
+map <C-w><Tab> <C-w>p
+
+"Jump to last position when reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
