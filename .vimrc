@@ -13,8 +13,8 @@ behave xterm
 
 "Yank and paste using the OS clipboard
 if has('unnamedplus')
-    "On X11, yanks and deletions go to copy clipboard "+, 
-	" yanks will also go to the selection buffer for good measure, and
+    "On X11, yanks and deletions go to copy clipboard "+,
+    " yanks will also go to the selection buffer for good measure, and
     " visual selections just go to the selection buffer "*
     set clipboard=unnamedplus,unnamed,autoselect
 else
@@ -126,6 +126,7 @@ call plug#begin('~/.vim/plugged')
     " GoTo code navigation.
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gr <Plug>(coc-references)
+    nmap <silent> gD <Plug>(coc-implementation)
     " Formatting selected code.
     xmap <leader>f  <Plug>(coc-format-selected)
     nmap <leader>f  <Plug>(coc-format-selected)
@@ -144,7 +145,7 @@ call plug#begin('~/.vim/plugged')
         " show chunk diff at current position
         nmap gs <Plug>(coc-git-chunkinfo)
         " show commit contains current position
-        nmap gc <Plug>(coc-git-commit)
+        "nmap gc <Plug>(coc-git-commit)
         " create text object for git chunks
         omap ig <Plug>(coc-git-chunk-inner)
         xmap ig <Plug>(coc-git-chunk-inner)
@@ -180,11 +181,19 @@ call plug#begin('~/.vim/plugged')
     "Bracketing macros
     Plug 'tpope/vim-surround'
 
+    "Quick commenting: gc{motion}
+    Plug 'tomtom/tcomment_vim'
+    let g:tcomment#options = {'whitespace': 'no'}
+    let g:tcomment#blank_lines = 0
+    "Copy duplicate n lines as comments
+    map gcy :<C-u>exec '.,.+'. (v:count1 - 1) . 'y\|put!\|.-' . (v:count1 - 1) . ',.TComment!'<CR>
+
+    "Dark color theme
     Plug 'tomasr/molokai'
 
     "Bold/underline unique letters for jumping
     Plug 'unblevable/quick-scope'
-	let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+    let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
     "Lightweight C++ syntax highlighting
     Plug 'bfrg/vim-cpp-modern'
@@ -255,8 +264,9 @@ cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
 cnoremap %. <C-R>=fnameescape(expand('%:r')).'.'<cr>
 "Copy to the end of line
 map Y y$
-"Format the current function
-map gqp [[v%o-gq
+"A custom motion for top-level blocks with headers
+xnoremap <silent>af [[%o[[-
+onoremap <silent>af :<C-u>exec'normal v' . v:count1 . 'af'<CR>
 "Always show at least 5 lines above/below the cursor
 set scrolloff=4
 "Cleaned up NPC-viewer. Run `:set list` to see

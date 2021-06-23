@@ -16,9 +16,9 @@ setopt interactivecomments
 autoload -U colors && colors
 autoload -Uz compinit && compinit
 
-if [ -f /usr/share/share/z.sh ]
+if [ -f /usr/share/z/z.sh ]
 then
-  source /usr/share/share/z.sh
+  source /usr/share/z/z.sh
 fi
 
 if [ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]
