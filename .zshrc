@@ -180,6 +180,9 @@ zle -N zle-keymap-select
 
 #Allow backspace to go before start of vi insertion
 bindkey -v '^?' backward-delete-char
+#Quickly switch from visual to insert with i,
+# since I'm constantly hitting v by mistake
+bindkey -M visual i vi-insert
 #Delete, Home, and End keys are broken by default
 bindkey '^[[3~' delete-char
 bindkey '^[[1~' beginning-of-line

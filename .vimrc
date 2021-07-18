@@ -270,7 +270,7 @@ onoremap <silent>af :<C-u>exec'normal v' . v:count1 . 'af'<CR>
 "Always show at least 5 lines above/below the cursor
 set scrolloff=4
 "Cleaned up NPC-viewer. Run `:set list` to see
-set listchars=tab:\|->,trail:_,extends:>,precedes:<,nbsp:+
+set listchars=tab:\|->,trail:·,extends:>,precedes:<,nbsp:·
 
 "Use relative line numbers only in normal mode
 augroup every
@@ -286,3 +286,9 @@ map <C-w><Tab> <C-w>p
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
+"Change the tildes at the end of the file
+set fillchars=eob:·
+
+"No need to enter ex mode
+map Q :q<CR>
