@@ -8,6 +8,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+#Mimics bash's behavior of hiding commands with a leading space from history
+setopt HIST_IGNORE_SPACE
+
 setopt AUTO_CD
 setopt HIST_IGNORE_DUPS
 HISTSIZE=900
@@ -67,19 +70,19 @@ alias tree='ls --tree'
 [ -x "$(command -v dust)" ] && alias du="dust"
 
 [ -x "$(command -v procs)" ] && alias ps="procs"
+[ -x "$(command -v htop)" ] && alias top="htop"
 
 export VISUAL=vim
 bindkey -v
 export TERM=xterm-256color CLICOLOR=1
 export PATH=$PATH:~/bin
-export BROWSER=w3m
+export BROWSER=vivaldi-stable
 export XDG_CONFIG_HOME=~/dotfiles/.config/
 #Make the scroll wheel work when the pager runs in tmux
 #Allow terminal colors
 #Don't run pager if there's nothing to scroll
 #Ctrl-C quits
 export LESS="--mouse --RAW-CONTROL-CHARS --quit-if-one-screen --quit-on-intr"
-
 if [ -f ~/wimpline/.wimpline.sh ]
 then
     source ~/wimpline/.wimpline.sh
@@ -132,7 +135,7 @@ then
 	zle -N vi-yank
 
 	function vi-put-before {
-		CUTBUFFER=$(eval $paste_cmd)
+		CUTBUFFER=$(eval $paste_cmd 2> /dev/null)
 		zle vi-put-before-old
 	}
 
@@ -140,7 +143,7 @@ then
 	zle -N vi-put-before
 
 	function vi-put-after {
-		CUTBUFFER=$(eval $paste_cmd)
+		CUTBUFFER=$(eval $paste_cmd 2> /dev/null)
 		zle vi-put-after-old
 	}
 
@@ -184,11 +187,18 @@ bindkey -v '^?' backward-delete-char
 bindkey '^[[3~' delete-char
 bindkey '^[[1~' beginning-of-line
 bindkey '^[[4~' end-of-line
+#vim normal mode H and L behave like ^ and $
+bindkey -a 'H' beginning-of-line
+bindkey -a 'L' end-of-line
+#Previous and next command in insert mode
+bindkey '^P' up-history
+bindkey '^N' down-history
 
-#Gosh I wish Linux would do this automatically, but whenever I reboot my
-#computer or replug my keyboard, it fails to map caps lock to esc, so I need
-#to run this command.
-alias esc="setxkbmap -layout dvorak -option caps:escape,altwin:menu_win"
+#Ctrl-V will open the current line in vim
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^V" edit-command-line
+bindkey -M vicmd "^V" edit-command-line
 
 #cd to the top level of a git repository.
 alias cdr='cd $(git rev-parse --show-toplevel)'
@@ -225,3 +235,8 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/dotfiles/.p10k.zsh ]] || source ~/dotfiles/.p10k.zsh
+
+export ZLE_RPROMPT_INDENT=0
+
+#Prevent execute-named-cmd, which is useless, easy to enter, and difficult to escape from
+bindkey -a -r ':'

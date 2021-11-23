@@ -1,7 +1,8 @@
 [diff]
 	tool = vimdiff
 [merge]
-	tool = vimdiff
+	conflictStyle = diff3
+	tool = vimdiff3
 [difftool]
 	prompt = false
 [clean]
@@ -20,6 +21,8 @@
     #Unless otherwise specified, push the current branch to its identically-
     # named remote counterpart
     default = current
+[pull]
+	rebase = true
 [alias]
     #Print out the branch tree
     graph = log --graph --oneline

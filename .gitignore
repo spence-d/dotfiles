@@ -2,3 +2,4 @@
 .*.sw?
 tags
 compile_commands.json
+.gdbinit

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#Set layout to Sporak, use Caps Lock as Ctrl when held, Win is another Alt
+#Ctrl-Alt-Backspace terminates X11, and hitting both shifts enter shift lock
+setxkbmap spiffy,sporak,us
+
+#Set the built-in keyboard as QWERTY for guests
+laptopKeebLine=$(xinput -list | grep "AT Translated")
+regex='id=([0-9]+)'
+if [[ $laptopKeebLine =~ $regex ]]
+then
+	laptopKeebId=${BASH_REMATCH[1]}
+	echo Guest keyboard ID $laptopKeebId
+	setxkbmap -device $laptopKeebId us
+fi
+
+if [ -x "$(command -v xcape)" ]
+then
+  #If xcape is installed, augment Caps Lock to also be Esc (when not held)
+  killall xcape
+  xcape -t 200 -e Control_L=Escape
+  xcape -t 200 -e Control_R=Caps_Lock
+  xcape -t 200 -e Alt_L=BackSpace
+else
+  #Otherwise, forget the Ctrl behavior and only use it as Esc.
+  setxkbmap -option caps:escape
+fi
+
+#Increase key repeat rate
+xset r rate 500 50
